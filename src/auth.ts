@@ -5,6 +5,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 import { db } from "@/db/db";
+import { getRole } from "@/lib/utils";
 
 const publicPathnames = ["/", "/terms", "/privacy"];
 
@@ -36,6 +37,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       return true;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = await getRole(user.id!);
+      }
+
+      return token;
+    },
+    session({ session, token }) {
+      session.user.role = token.role;
+
+      return session;
     },
   },
 });
