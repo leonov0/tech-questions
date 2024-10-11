@@ -4,6 +4,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -15,7 +16,13 @@ export const users = pgTable("user", {
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  role: varchar("role", { length: 255, enum: ["user", "admin"] }).default(
+    "user",
+  ),
 });
+
+export const User = users.$inferSelect;
+export const NewUser = users.$inferInsert;
 
 export const accounts = pgTable(
   "account",

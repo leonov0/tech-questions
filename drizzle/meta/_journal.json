@@ -8,6 +8,13 @@
       "when": 1728636866913,
       "tag": "0000_clever_mister_fear",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1728670977240,
+      "tag": "0001_chilly_doctor_spectrum",
+      "breakpoints": true
     }
   ]
 }
