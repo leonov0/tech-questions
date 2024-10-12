@@ -7,7 +7,8 @@ import type { User } from "@/db/schema";
 declare module "next-auth" {
   interface Session {
     user: {
-      role?: typeof User.role;
+      role?: User["role"];
+      username?: User["username"];
     } & DefaultSession["user"];
   }
 }
@@ -16,6 +17,7 @@ import { JWT } from "next-auth/jwt";
 
 declare module "next-auth/jwt" {
   interface JWT {
-    role?: typeof User.role;
+    role?: User["role"];
+    username?: User["username"];
   }
 }
