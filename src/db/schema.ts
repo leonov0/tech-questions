@@ -19,10 +19,11 @@ export const users = pgTable("user", {
   role: varchar("role", { length: 255, enum: ["user", "admin"] }).default(
     "user",
   ),
+  username: varchar("username", { length: 255 }).unique(),
 });
 
-export const User = users.$inferSelect;
-export const NewUser = users.$inferInsert;
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 
 export const accounts = pgTable(
   "account",

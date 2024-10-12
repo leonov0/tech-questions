@@ -5,7 +5,13 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 import { db } from "@/db/db";
-import { getRole } from "@/lib/user-service";
+import {
+  generateUsernameFromEmail,
+  getUser,
+  updateUser,
+} from "@/features/users/service";
+
+const privateRoutes = ["/complete-profile"];
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -15,32 +21,49 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: "/login",
+    newUser: "/complete-profile",
   },
   callbacks: {
     async authorized({ auth, request }) {
-      const pathname = request.nextUrl.pathname;
+      if (request.nextUrl.pathname === "/login" && auth) {
+        const url = new URL("/", request.nextUrl.origin).toString();
 
-      if (pathname === "/login") {
-        if (auth) {
-          const url = new URL("/", request.nextUrl.origin).toString();
+        return NextResponse.redirect(url);
+      }
 
-          return NextResponse.redirect(url);
-        }
-
-        return true;
+      if (privateRoutes.includes(request.nextUrl.pathname) && !auth) {
+        return false;
       }
 
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "signUp") {
+        const username = await generateUsernameFromEmail(user.email!);
+
+        await updateUser(user.id!, { username });
+      }
+
+      if (trigger === "update" && session?.username) {
+        token.username = session.username;
+      }
+
       if (user) {
-        token.role = await getRole(user.id!);
+        const { role, username } = await getUser(user.id!);
+
+        token.role = role;
+        token.username = username;
       }
 
       return token;
     },
     session({ session, token }) {
+      if (token.sub) {
+        session.user.id = token.sub;
+      }
+
       session.user.role = token.role;
+      session.user.username = token.username;
 
       return session;
     },
