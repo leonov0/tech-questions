@@ -5,7 +5,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 import { db } from "@/db/db";
-import { getRole } from "@/lib/utils";
+import { getRole } from "@/lib/user-service";
 
 const publicPathnames = ["/", "/terms", "/privacy"];
 
