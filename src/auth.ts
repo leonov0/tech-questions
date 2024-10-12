@@ -5,9 +5,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 import { db } from "@/db/db";
-import { getRole } from "@/lib/utils";
-
-const publicPathnames = ["/", "/terms", "/privacy"];
+import { getRole } from "@/lib/user-service";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -30,10 +28,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         return true;
-      }
-
-      if (!publicPathnames.includes(pathname) && !auth) {
-        return false;
       }
 
       return true;
