@@ -103,7 +103,15 @@ export async function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <ThemeToggle />
+            <div className="space-x-4">
+              <ThemeToggle />
+              <Link
+                href="/login"
+                className={buttonVariants({ variant: "secondary" })}
+              >
+                Sign in
+              </Link>
+            </div>
           )}
         </div>
       </div>
