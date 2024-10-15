@@ -122,7 +122,7 @@ export async function Header() {
                 />
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent>
+              <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
                   <Link href="/profile">
                     <PersonIcon />
