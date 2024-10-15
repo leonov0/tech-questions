@@ -63,8 +63,8 @@ export async function Header() {
                         </div>
 
                         <p className="text-sm leading-tight text-muted-foreground">
-                          Explore real questions from interviews at it
-                          companies.
+                          Explore our comprehensive library of real tech
+                          interview questions.
                         </p>
                       </Link>
                     </NavigationMenuLink>
